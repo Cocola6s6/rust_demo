@@ -1,0 +1,3 @@
+[workspace]
+
+members = ["tcp_server", "tcp_client"]
