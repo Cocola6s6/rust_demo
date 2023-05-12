@@ -1,42 +1,55 @@
 use http::{httprequest::HttpRequest, httpresponse::HttpResponse};
-use serde::{Deserialize, Serialize}
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env;
 use std::fs;
 
-pub trait handler {
-    fn hanlde(req: &HttpRequest) -> HttpResponse;
-    fn load_file()->Option<String> {
-        let default_path = format!("{}/public", env!("CARGO_MANIFEST_DIR"));
-        let public_path = env::var("PUBLIC_PATH").unwrap(default_path);
-        let full_path = format!("{}/{}", public_path, file_path);
+pub trait Handler {
+    // 通用接受请求返回响应
+    fn handle(req: &HttpRequest) -> HttpResponse;
+
+    // 通用加载静态文件
+    fn load_file(file_name: &str) -> Option<String> {
+        let default_path = format!("{}/public", env!("CARGO_MANIFEST_DIR")); // CARGO_MANIFEST_DIR 表示当前crete的根目录
+        let public_path = env::var("PUBLIC_PATH").unwrap_or(default_path); // 先取自定义的环境变量，取不到就取默认下的
+        let full_path = format!("{}/{}", public_path, file_name);
 
         let contents = fs::read_to_string(full_path);
-        Ok(contents)
+
+        println!("load_file================================>{:?}", &contents);
+        contents.ok()
     }
 }
 
-
 // 模拟业务，创建订单状态结构体
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct OrderStatus {
     order_id: i32,
     order_date: String,
     order_status: String,
 }
 pub struct StaticPageHandler;
-pub struct PageeNotFoundHandler
+pub struct PageNotFoundHandler;
 pub struct WebServiceHandler;
 
-impl Handler for StaticPageHandler¬{
+impl Handler for PageNotFoundHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
-        let http::httprequest::HttpRequest::Resource::Path(s) = &req.resource; // TODO 为什么这样取值？
-        let source: Vec<&str> = s.split("/").collect();
-        match route[1] {
-            "" => HttpResponse::new("200", None, Self::load_file("index.html"));
-            "health" => HttpResponse::new("200",None, Self::load_file("health.html"));
+        let resp: HttpResponse = HttpResponse::new("404", None, Self::load_file("404.html"));
+
+        println!("[StaticPageHandler][resp={:?}]", &resp);
+        resp
+    }
+}
+
+impl Handler for StaticPageHandler {
+    fn handle(req: &HttpRequest) -> HttpResponse {
+        let http::httprequest::Resource::Path(s) = &req.resource; // TODO 为什么这样取值？
+        let route: Vec<&str> = s.split("/").collect();
+        let resp:HttpResponse = match route[1] {
+            "" => HttpResponse::new("200", None, Self::load_file("index.html")),
+            "health" => HttpResponse::new("200", None, Self::load_file("health.html")),
             // 按顺序，如果是其他，无论是什么，再进行一下处理
-            path = > match self::load_file(path) {
+            path => match Self::load_file(path) {
                 Some(contents) => {
                     let mut map: HashMap<&str, &str> = HashMap::new();
                     if path.ends_with(".css") {
@@ -46,22 +59,28 @@ impl Handler for StaticPageHandler¬{
                     } else {
                         map.insert("Content-Type", "text/html");
                     }
+                    HttpResponse::new("200", Some(map), Some(contents))
                 }
-                None => HttpResponse::new("404", None, Self::load_file("404.html"));
-            }
-        }
+                None => HttpResponse::new("404", None, Self::load_file("404.html")),
+            },
+        };
+
+        println!("[StaticPageHandler][resp={:?}]", &resp);
+        resp
     }
 }
 
 impl WebServiceHandler {
-    fn load_json() -> Vec(OrderStatus){
-    let default_path = format!("{}/data", env!("CARGO_MANIFEST_DIR"));
-        let data_path = env::var("DATA_PATH").unwrap(default_path);
-        let full_path = format!("{}/{}", public_path, "orders.json");
-        
-        let json_contents = fs::read_to_string(full_path);
-        let orders : Vec(OrderStatus) = serde_json::from_str(json_contents.unwrap()).as_str().unwrap();
+    fn load_json() -> Vec<OrderStatus> {
+        let default_path = format!("{}/data", env!("CARGO_MANIFEST_DIR"));
+        let data_path = env::var("DATA_PATH").unwrap_or(default_path);
+        let full_path = format!("{}/{}", data_path, "orders.json");
 
+        let json_contents = fs::read_to_string(full_path);
+        let orders: Vec<OrderStatus> =
+            serde_json::from_str(json_contents.unwrap().as_str()).unwrap();
+
+        println!("load_json================================>{:?}", &orders);
         orders
     }
 }
@@ -69,17 +88,19 @@ impl WebServiceHandler {
 impl Handler for WebServiceHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
         let http::httprequest::Resource::Path(s) = &req.resource;
-        let route : Vec<&str> = s.split("/").collect();
+        let route: Vec<&str> = s.split('/').collect();
         // localhost:5000/api/shopping/orders
-        match route[2] {
-            "shopping" if route.len()>2 && route[3] == "orders" => {
-let body = Some(serde_json::to_string(&Self::load_json()).unwrap());
-let mut headers: HashMap<&str, &str> = HashMap::new();
-headers.insert("Content-Type", "application/json");
-HttpResponse::new("200", Some(headers), body)
-            };
-_ => HttpResponse::new("404", None, Self::load_file("404.html"));
+        let resp: HttpResponse = match route[2] {
+            "shopping" if route.len() > 2 && route[3] == "orders" => {
+                let body = Some(serde_json::to_string(&Self::load_json()).unwrap());
+                let mut headers: HashMap<&str, &str> = HashMap::new();
+                headers.insert("Content-Type", "application/json");
+                HttpResponse::new("200", Some(headers), body)
+            }
+            _ => HttpResponse::new("404", None, Self::load_file("404.html")),
+        };
 
-        }
+        println!("[WebServiceHandler][resp={:?}]", &resp);
+        resp
     }
 }

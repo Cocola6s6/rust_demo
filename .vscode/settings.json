@@ -2,5 +2,9 @@
     "rust-analyzer.linkedProjects": [
         "./http_test/http/Cargo.toml",
         "./http_test/http_server/Cargo.toml"
-    ]
+    ],
+    "lldb.displayFormat": "auto",
+    "lldb.showDisassembly": "auto",
+    "lldb.dereferencePointers": true,
+    "lldb.consoleMode": "commands"
 }

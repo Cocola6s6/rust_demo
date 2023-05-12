@@ -26,19 +26,19 @@ impl<'a> From<HttpResponse<'a>> for String {
     fn from(res: HttpResponse) -> String {
         let res1 = res.clone();
         format!(
-            "{} {} {}\r\nContent-Length:{}\r\n\r\n{}",
+            "{} {} {}\r\n{}Content-Length: {}\r\n\r\n{}",
             &res1.version(),
             &res1.status_code(),
             &res1.status_text(),
             &res1.headers(),
-            // &res1.body.unwrap().len(),
+            &res.body.unwrap().len(),
             &res1.body(),
         )
     }
 }
 
 impl<'a> HttpResponse<'a> {
-    fn new(
+    pub fn new(
         status_code: &'a str,
         headers: Option<HashMap<&'a str, &'a str>>,
         body: Option<String>,
@@ -69,11 +69,12 @@ impl<'a> HttpResponse<'a> {
         response
     }
 
-    pub fn send_response(&self, write_stream: &mut impl Write) -> Result<()> {
-        let res = self.clone();
-        let response_string = String::from(res);
+    pub fn send_response(&self, write_stream: &mut impl Write) -> Result<()> {  // TODO &mut impl Write 怎么理解？
+        let res:HttpResponse = self.clone();
+        let response_string: String = String::from(res);
         let _ = write!(write_stream, "{}", response_string);
 
+        println!("send_response================================>{:?}", &response_string);
         Ok(())
     }
 
