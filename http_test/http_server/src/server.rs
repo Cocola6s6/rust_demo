@@ -22,7 +22,8 @@ impl<'a> Server<'a> {
             let mut stream = stream.unwrap();
             println!("Connection established");
 
-            // 将信息存入buffer, 这里如果buffer设置小了，会导致页面显示不出来
+            // 将信息存入buffer,
+            // 这里如果buffer设置小了，会导致页面显示不出来
             let mut read_buffer = [0; 2048];
             stream.read(&mut read_buffer).unwrap(); // TOOD 为什么用可变引用, 因为read_buffer是可变的
             let req: HttpRequest = String::from_utf8(read_buffer.to_vec()).unwrap().into();   // TOOD 为什么能转化为HttpRequest

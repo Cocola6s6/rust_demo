@@ -69,12 +69,12 @@ impl<'a> HttpResponse<'a> {
         response
     }
 
-    pub fn send_response(&self, write_stream: &mut impl Write) -> Result<()> {  // TODO &mut impl Write 怎么理解？
+    pub fn send_response(&self, write_stream: &mut impl Write) -> Result<()> {  // TODO &mut impl Write 怎么理解？trait作为可以参数，函数体内，还可以调用该trait的方法
         let res:HttpResponse = self.clone();
         let response_string: String = String::from(res);
         let _ = write!(write_stream, "{}", response_string);
 
-        println!("send_response================================>{:?}", &response_string);
+        // println!("send_response================================>{:?}", &response_string);
         Ok(())
     }
 

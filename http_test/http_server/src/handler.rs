@@ -4,6 +4,14 @@ use std::collections::HashMap;
 use std::env;
 use std::fs;
 
+// 模拟业务，创建订单状态结构体
+#[derive(Serialize, Deserialize, Debug)]
+pub struct OrderStatus {
+    order_id: i32,
+    order_date: String,
+    order_status: String,
+}
+
 pub trait Handler {
     // 通用接受请求返回响应
     fn handle(req: &HttpRequest) -> HttpResponse;
@@ -16,18 +24,11 @@ pub trait Handler {
 
         let contents = fs::read_to_string(full_path);
 
-        println!("load_file================================>{:?}", &contents);
+        // println!("load_file================================>{:?}", &contents);
         contents.ok()
     }
 }
 
-// 模拟业务，创建订单状态结构体
-#[derive(Serialize, Deserialize, Debug)]
-pub struct OrderStatus {
-    order_id: i32,
-    order_date: String,
-    order_status: String,
-}
 pub struct StaticPageHandler;
 pub struct PageNotFoundHandler;
 pub struct WebServiceHandler;
@@ -36,16 +37,16 @@ impl Handler for PageNotFoundHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
         let resp: HttpResponse = HttpResponse::new("404", None, Self::load_file("404.html"));
 
-        println!("[StaticPageHandler][resp={:?}]", &resp);
+        // println!("[StaticPageHandler][resp={:?}]", &resp);
         resp
     }
 }
 
 impl Handler for StaticPageHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
-        let http::httprequest::Resource::Path(s) = &req.resource; // TODO 为什么这样取值？
+        let http::httprequest::Resource::Path(s) = &req.resource; // TODO 为什么这样取值？对枚举类型模式匹配获取s的值。
         let route: Vec<&str> = s.split("/").collect();
-        let resp:HttpResponse = match route[1] {
+        let resp: HttpResponse = match route[1] {
             "" => HttpResponse::new("200", None, Self::load_file("index.html")),
             "health" => HttpResponse::new("200", None, Self::load_file("health.html")),
             // 按顺序，如果是其他，无论是什么，再进行一下处理
@@ -80,7 +81,7 @@ impl WebServiceHandler {
         let orders: Vec<OrderStatus> =
             serde_json::from_str(json_contents.unwrap().as_str()).unwrap();
 
-        println!("load_json================================>{:?}", &orders);
+        // println!("load_json================================>{:?}", &orders);
         orders
     }
 }
@@ -89,18 +90,22 @@ impl Handler for WebServiceHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
         let http::httprequest::Resource::Path(s) = &req.resource;
         let route: Vec<&str> = s.split('/').collect();
+        if route.len() <= 3 {
+            return HttpResponse::new("404", None, Self::load_file("404.html"))
+        }
         // localhost:5000/api/shopping/orders
         let resp: HttpResponse = match route[2] {
-            "shopping" if route.len() > 2 && route[3] == "orders" => {
+            "shopping" if route.len() > 2 && route[3] == "orders" => {  // TODO 这是匹配守卫提供额外条件
                 let body = Some(serde_json::to_string(&Self::load_json()).unwrap());
                 let mut headers: HashMap<&str, &str> = HashMap::new();
                 headers.insert("Content-Type", "application/json");
                 HttpResponse::new("200", Some(headers), body)
-            }
+            },
+            
             _ => HttpResponse::new("404", None, Self::load_file("404.html")),
         };
 
-        println!("[WebServiceHandler][resp={:?}]", &resp);
+        // println!("[WebServiceHandler][resp={:?}]", &resp);
         resp
     }
 }
