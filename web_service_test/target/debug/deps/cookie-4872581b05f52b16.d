@@ -1,0 +1,12 @@
+/Users/yangshiyuan/Desktop/rust_demo/web_service_test/target/debug/deps/cookie-4872581b05f52b16.rmeta: /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/lib.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/builder.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/parse.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/jar.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/delta.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/draft.rs
+
+/Users/yangshiyuan/Desktop/rust_demo/web_service_test/target/debug/deps/libcookie-4872581b05f52b16.rlib: /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/lib.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/builder.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/parse.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/jar.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/delta.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/draft.rs
+
+/Users/yangshiyuan/Desktop/rust_demo/web_service_test/target/debug/deps/cookie-4872581b05f52b16.d: /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/lib.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/builder.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/parse.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/jar.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/delta.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/draft.rs
+
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/lib.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/builder.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/parse.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/jar.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/delta.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.14.4/src/draft.rs:

@@ -1,0 +1,10 @@
+/Users/yangshiyuan/Desktop/rust_demo/web_service_test/target/debug/deps/futures_channel-5cf77e43e5429096.rmeta: /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/lib.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/lock.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/mod.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/queue.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/sink_impl.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/oneshot.rs
+
+/Users/yangshiyuan/Desktop/rust_demo/web_service_test/target/debug/deps/futures_channel-5cf77e43e5429096.d: /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/lib.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/lock.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/mod.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/queue.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/sink_impl.rs /Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/oneshot.rs
+
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/lib.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/lock.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/mod.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/queue.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/mpsc/sink_impl.rs:
+/Users/yangshiyuan/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.28/src/oneshot.rs:
