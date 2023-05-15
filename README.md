@@ -18,4 +18,4 @@ this is a rust demo
 
 
 
-![image-20230515173305959](C:\Users\hhh\AppData\Roaming\Typora\typora-user-images\image-20230515173305959.png)
+![image-20230515173305959](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230515173305959.png)
