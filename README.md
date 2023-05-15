@@ -12,7 +12,7 @@ this is a rust demo
 
 ## WebAssembly
 
-![image-20230515173201949](C:\Users\hhh\AppData\Roaming\Typora\typora-user-images\image-20230515173201949.png)
+![image-20230515173201949](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230515173201949.png)
 
 
 
