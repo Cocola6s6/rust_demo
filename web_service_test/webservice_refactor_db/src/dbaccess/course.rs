@@ -1,65 +1,72 @@
+use crate::errors::MyError;
 use crate::models::course::Course;
-use chrono::NaiveDateTime;
+use chrono::NaiveDate;
 use sqlx::postgres::PgPool;
 
-pub async fn post_new_course_db(pool: &PgPool, new_course: Course) -> Course {
+pub async fn post_new_course_db(pool: &PgPool, new_course: Course) -> Result<Course, MyError> { // 引入DB后，会引发SQLError导致panic，所以将返回值改为定义错误返回
     let row = sqlx::query!(
-        r#"INSERT INTO course(id, teacher_id, name)
+        r#"INSERT INTO course(id, teacher_id, course_name)
         VALUES ($1, $2, $3)
-        RETURNING id, teacher_id, name, time"#,
+        RETURNING id, teacher_id, course_name, create_time"#,
         new_course.id,
         new_course.teacher_id,
-        new_course.name,
+        new_course.course_name,
     )
     .fetch_one(pool)
-    .await
-    .unwrap();
+    .await?;    // 不再使用unwrap直接panic，使用传播错误运算符将错误自动转换为自定义，并且传给上层
 
-    Course {
+    Ok(Course { // 传播错误运算符只处理了panic返回，Result的正确返回需要Ok()处理
         id: Some(row.id),
         teacher_id: row.teacher_id,
-        name: row.name.clone(),
-        time: Some(NaiveDateTime::from(row.time.unwrap())),
-    }
+        course_name: row.course_name.clone(),
+        create_time: Some(NaiveDate::from(row.create_time.unwrap())),
+    })
 }
 
-pub async fn get_courses_for_teacher_db(pool: &PgPool, teacher_id: i32) -> Vec<Course> {
+pub async fn get_courses_for_teacher_db(
+    pool: &PgPool,
+    teacher_id: i32,
+) -> Result<Vec<Course>, MyError> {
+    println!("[get_courses_for_teacher_db]");
     let rows = sqlx::query!(
-        r#"SELECT id, teacher_id, name, time
+        r#"SELECT id, teacher_id, course_name, create_time
         FROM course
         WHERE teacher_id = $1"#,
         teacher_id
     )
-    .fetch_alls(pool)
-    .await
-    .unwrap();
+    .fetch_all(pool)
+    .await?;
 
-    rows.iter()
+    Ok(rows
+        .iter()
         .map(|r| Course {
             id: Some(r.id),
             teacher_id: r.teacher_id,
-            name: r.name.clone(),
-            time: Some(NaiveDateTime::from(r.time.unwrap())),
+            course_name: r.course_name.clone(),
+            create_time: Some(NaiveDate::from(r.create_time.unwrap())),
         })
-        .collect()
+        .collect())
 }
 
-pub async fn get_course_detail_db(pool: &PgPool, teacher_id: i32, course_id: i32) -> Course {
+pub async fn get_course_detail_db(
+    pool: &PgPool,
+    teacher_id: i32,
+    id: i32,
+) -> Result<Course, MyError> {
     let row = sqlx::query!(
-        r#"SELECT id, teacher_id, name, time
+        r#"SELECT id, teacher_id, course_name, create_time
         FROM course
         WHERE teacher_id = $1 AND id = $2"#,
         teacher_id,
-        course_id
+        id
     )
     .fetch_one(pool) // TODO fetch_one和fetch_alls的区别是什么
-    .await
-    .unwrap();
+    .await?;
 
-    Course {
+    Ok(Course {
         id: Some(row.id),
         teacher_id: row.teacher_id,
-        name: row.name.clone(),
-        time: Some(NaiveDateTime::from(row.time.unwrap())),
-    }
+        course_name: row.course_name.clone(),
+        create_time: Some(NaiveDate::from(row.create_time.unwrap())),
+    })
 }

@@ -8,11 +8,10 @@ pub fn general_routes(cfg: &mut web::ServiceConfig) {
 }
 
 // router2
-// curl -X POST localhost:5000/courses/ -H "Content-Type: application/json" -d '{"teacher_id": 1, "name": "First course"}'
+// curl -X POST localhost:5000/courses/ -H "Content-Type: application/json" -d '{"id": 4, "teacher_id": 1, "course_name": "First course"}'
 // curl -X GET localhost:5000/courses/1
 // curl -X GET localhost:5000/courses/1/1
 pub fn course_routes(cfg: &mut web::ServiceConfig) {
-    println!("[router][course_routes]===========>");
     cfg.service(
         web::scope("/courses")
             .route("/", web::post().to(new_course))

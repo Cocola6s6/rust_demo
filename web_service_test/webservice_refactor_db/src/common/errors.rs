@@ -1,6 +1,7 @@
 use actix_web::{error, http::StatusCode, HttpResponse, Result};
 use serde::Serialize;
 use std::fmt;
+use sqlx::error::Error as SQLxError;
 
 #[derive(Debug, Serialize)]
 pub enum MyError {
@@ -62,5 +63,11 @@ impl fmt::Display for MyError {
 impl From<actix_web::error::Error> for MyError {
     fn from(err: actix_web::error::Error) -> Self {
         MyError::ActixError(err.to_string())
+    }
+}
+
+impl From<SQLxError> for MyError {
+    fn from(err: SQLxError) -> Self {
+        MyError::DBError(err.to_string())
     }
 }

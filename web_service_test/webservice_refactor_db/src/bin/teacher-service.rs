@@ -1,9 +1,9 @@
 use actix_web::{web, App, HttpServer};
 use dotenv::dotenv;
-use std::io;
-use std::env;
-use std::sync::Mutex;
 use sqlx::postgres::PgPoolOptions;
+use std::env;
+use std::io;
+use std::sync::Mutex;
 
 #[path = "../handlers/mod.rs"]
 mod handlers;
@@ -28,8 +28,8 @@ use state::AppState;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    dotenv().ok();  //TODO 这里什么意思？
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL is miss");
+    dotenv().ok();
+    let database_url = env::var("DATABASE_URL").expect("没找到配置文件");   // 文件路径是webservice路径开始的
     let db_pool = PgPoolOptions::new().connect(&database_url).await.unwrap();
 
     // 配置/初始化
