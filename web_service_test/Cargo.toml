@@ -1,3 +1,3 @@
 [workspace]
 
-members = ["webservice", "webservice_refactor", "wasm-game-of-life", "webservice_refactor_db"]
+members = ["webservice", "webservice_refactor", "wasm-game-of-life", "webservice_refactor_db", "wasm-client"]
