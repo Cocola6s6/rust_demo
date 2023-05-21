@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello wasm-pack!</title>
+  </head>
+  <body>
+    <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+    <script src="./bootstrap.js"></script>
+
+    <!-- 创建表单 -->
+    <div>
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">CourseName</th>
+              <th scope="col">TeacherId</th>
+              <th scope="col">CreateTime</th>
+              <th scope="col">Operate</th>
+            </tr>
+          </thead>
+          <!-- 这里渲染数据 -->
+          <tbody id="left-tbody"></tbody>
+      </table>
+      <div id="left"></div>
+    </div>
+  </body>
+</html>
