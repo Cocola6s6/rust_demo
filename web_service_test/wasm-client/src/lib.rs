@@ -109,3 +109,10 @@ pub async fn main() -> Result<(), JsValue> {
 
     Ok(())
 }
+
+#[wasm_bindgen] // wasmApi 返回值需要为Result<(), JsValue>
+pub async fn insert_course_api(teacher_id: i32, course_name: String) -> Result<(), JsValue> {
+    log("[wasm-client][insert_course_api]");
+    insert_course(teacher_id, course_name).await;
+    Ok(())
+}

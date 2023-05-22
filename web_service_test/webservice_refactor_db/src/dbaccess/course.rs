@@ -7,10 +7,9 @@ pub async fn post_new_course_db(pool: &PgPool, new_course: Course) -> Result<Cou
     // 引入DB后，会引发SQLError导致panic，所以将返回值改为定义错误返回
     println!("[post_new_course_db]");
     let row = sqlx::query!(
-        r#"INSERT INTO course(id, teacher_id, course_name)
-        VALUES ($1, $2, $3)
+        r#"INSERT INTO course(teacher_id, course_name)
+        VALUES ($1, $2)
         RETURNING id, teacher_id, course_name, create_time"#,
-        new_course.id,
         new_course.teacher_id,
         new_course.course_name,
     )
