@@ -9,14 +9,17 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+// 浏览器Api
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
+    fn confirm(s: &str) -> bool;
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
 
+// wasmApi
 #[wasm_bindgen]
 pub fn greet() {
     alert("Hello, wasm-client!");
@@ -73,7 +76,7 @@ pub async fn main() -> Result<(), JsValue> {
         td.set_text_content(Some(format!("{}", course.create_time).as_str()));
         tr.append_child(&td)?;
 
-        // td for button
+        // td for button to delete
         let td = document.create_element("td")?;
         let btn: HtmlButtonElement = document
             .create_element("button")
@@ -81,19 +84,23 @@ pub async fn main() -> Result<(), JsValue> {
             .dyn_into::<HtmlButtonElement>()
             .unwrap();
         let cid = course.id;
-        let click_closure = Closure::wrap(Box::new(move |event: web_sys::MouseEvent| {
+        let click_closure = Closure::wrap(Box::new(move |event: web_sys::MouseEvent| {  // TODO 这个闭包怎么理解
+                                                                                                                    // 将闭包类型修改为<dyn Fn(_)>
             let result = confirm(format!("Confirm delete, id={}?", cid).as_str());
             match result {
                 true => {
                     spawn_local(delete_course(cid));
                     alert("delete finish");
-                    web_sys::window().unwrap().location().reload().unwrap();
+                    web_sys::window().unwrap().location().reload().unwrap();    // 浏览器刷新
                 }
                 _ => {}
             }
-        })) as Box<dyn Fn(_)>;
-
+        }) as Box<dyn Fn(_)>);
+        btn.add_event_listener_with_callback("click", click_closure.as_ref().unchecked_ref())?;  // 将闭包和点击按钮点击事件绑定
+                                                                        // 但是它要求闭包类型是<dyn Fn())>，所以需要使用Closure::wrap修改闭包返回类型
+        click_closure.forget(); // 不drop闭包函数
         btn.set_attribute("class", "btn")?;
+        td.set_text_content(Some("Delete"));
         td.append_child(&btn)?;
 
         tr.append_child(&td)?;
