@@ -20,6 +20,7 @@ sqlx = {version = "0.6.3", default-features = false, features = [
     "macros",
     "chrono",
 ]}
+thiserror={version="1.0.40"}
 
 
 [[bin]]

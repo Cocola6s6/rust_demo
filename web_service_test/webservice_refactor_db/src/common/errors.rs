@@ -15,6 +15,17 @@ pub struct MyErrorResponse {
     error_msg: String,
 }
 
+// 手动实现 Display trait
+impl fmt::Display for MyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        match self {
+            MyError::DBError(msg) => write!(f, "DBError: {}", msg),
+            MyError::ActixError(msg) => write!(f, "ActixError: {}", msg),
+            _ => write!(f, "NotFound: {}", self),
+        }
+    }
+}
+
 impl MyError {
     fn error_response(&self) -> String {
         match self {
@@ -51,12 +62,6 @@ impl error::ResponseError for MyError {
     }
 }
 
-// 这个trait的实现需要实现Display和Debug这两个trait
-impl fmt::Display for MyError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        write!(f, "{}", self)
-    }
-}
 
 // From：从另一个类型T转换为自己
 // Into：转换为另一种类型T
