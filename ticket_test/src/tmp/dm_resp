@@ -1,0 +1,20 @@
+{
+    "api": "mtop.damai.wireless.user.session.transform",
+    "data": {
+        "accountCreateTime": "2021-11-16 17:50:34",
+        "accountType": 108001,
+        "domainId": 0,
+        "email": "",
+        "havanaId": 2212831316353,
+        "id": "2509d5954236458f93aa34d592a9c561_2_2",
+        "loginPattern": 106004,
+        "mobile": "15277945132",
+        "nationPrefix": "86",
+        "nickname": "麦子2vRYM",
+        "userId": 181272009
+    },
+    "ret": [
+        "SUCCESS::调用成功"
+    ],
+    "v": "1.0"
+}
