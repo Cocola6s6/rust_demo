@@ -38,7 +38,9 @@ fn main() {
 fn Video<G: Html>(ctx: Scope) -> View<G> {
     let video_ref = create_node_ref(ctx);
 
+    // 获取 view 并且填充信息
     let video_future = async move {
+        info!("[video_future]===============>");
         let el = video_ref
             .get::<DomNode>()
             .unchecked_into::<HtmlVideoElement>();
@@ -53,9 +55,11 @@ fn Video<G: Html>(ctx: Scope) -> View<G> {
         }));
     };
 
+    // 需要异步执行，因为得先创建才能获取修改
     wasm_bindgen_futures::spawn_local(video_future);
 
-    info!("test===============");
+    // 创建页面 view
+    info!("[create view]===============>");
     view! {ctx,
         div {
             video(
