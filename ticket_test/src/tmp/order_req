@@ -1,0 +1,316 @@
+{
+	"params": "{"
+	data ":" {
+		"dmEttributesHiddenBlock_DmAttributesBlock": {
+			"ref": "3dea421",
+			"submit": true,
+			"id": "DmAttributesBlock",
+			"tag": "dmEttributesHiddenBlock",
+			"type": "block$null$dmettributeshidden",
+			"fields": {
+				"extraAttributes": "{"
+				finalRenderTraceId ":"
+				213e1 f3716876607784771983e5d61 ","
+				renderTraceId ":"
+				213e1 f3716876607784771983e5d61 ","
+				seatInfo ":[{"
+				seatId ":1489375422,"
+				seatName ":"
+				4 排3号 ","
+				skuId ":5208120119841,"
+				standId ":17133892}]}"
+			}
+		},
+		"dmContactName_4022656": {
+			"ref": "60f80d3",
+			"submit": true,
+			"id": "4022656",
+			"tag": "dmContactName",
+			"type": "dinamicx$3128$dminput",
+			"fields": {
+				"label": "姓名",
+				"placeholder": "请填写联系人姓名",
+				"value": "杨时元"
+			},
+			"events": {
+				"onFinish": [{
+					"tag": "input",
+					"type": "input",
+					"fields": {
+						"value": "杨时元"
+					}
+				}]
+			},
+			"validate": {
+				"msg": ["请填写联系人姓名", "联系人姓名不可长于10"],
+				"regex": ["^[\S]+$", "^[\S]{1,10}$"],
+				"fields": ["value", "value"]
+			}
+		},
+		"dmPayType_4022665": {
+			"ref": "b7922c3",
+			"submit": true,
+			"id": "4022665",
+			"tag": "dmPayType",
+			"type": "native$null$dmpaytype",
+			"fields": {
+				"allTip": "其他支付方式",
+				"paytypeList": [{
+					"cashierOrderNo": "enableCashier",
+					"code": "ALIPAY_WAP",
+					"icon": "https://gw.alicdn.com/tfs/TB1oqi.owgP7K4jSZFqXXamhVXa-64-64.png",
+					"isUsed": true,
+					"name": "支付宝",
+					"payPromotionAmount": "28000",
+					"payTypeId": 1
+				}]
+			},
+			"events": {
+				"itemClick": [{
+					"tag": "select",
+					"type": "select",
+					"fields": {}
+				}]
+			}
+		},
+		"dmDeliverySelectCard_4022646": {
+			"ref": "954e85d",
+			"submit": true,
+			"id": "4022646",
+			"tag": "dmDeliverySelectCard",
+			"type": "dinamicx$3127$dmselectheader",
+			"fields": {
+				"tipInfo": "支付成功后，前往票夹查看取票信息",
+				"selectedId": "3_1",
+				"extraLink": false,
+				"title": "配送方式",
+				"desc": "自助机取票"
+			}
+		},
+		"dmViewer_4022644": {
+			"ref": "cba4eb8",
+			"submit": true,
+			"id": "4022644",
+			"tag": "dmViewer",
+			"type": "native$null$dmviewer",
+			"fields": {
+				"omitDisplaySum": 20,
+				"asyncTarget": "dmViewerTitle_4022644",
+				"expandTip": "全部观演人"
+			},
+			"validate": {
+				"msg": ["共需选择null位观演人"],
+				"regex": ["null"],
+				"fields": ["selectedNum"]
+			},
+			"status": "hidden"
+		},
+		"confirmOrder_1": {
+			"ref": "8318d7a",
+			"submit": true,
+			"hidden": {
+				"extensionMap": {
+					"pageType": "DAMAI",
+					"umid": "",
+					"__ex_params__": "{"
+					umpChannel ":"
+					100031004 ","
+					serviceVersion ":"
+					2.0 .0 ","
+					distributionId ":"
+					","
+					customerType ":"
+					default ","
+					EXCLUDE_BY_NEWTON_GRAY_KEY ":true,"
+					quickBuy ":"
+					0 ","
+					channel ":"
+					damai_app ","
+					subChannel ":"
+					damai @damaih5_h5 ","
+					atomSplit ":"
+					1 ","
+					seatInfo ":" [{
+						"seatId": 1489375422,
+						"standId": "17133892"
+					}]
+					"}",
+					"joinId": "ce6ca09d837959be467df77e88f0102f"
+				}
+			},
+			"id": "1",
+			"tag": "confirmOrder",
+			"type": "block$null$emptyBlock",
+			"fields": {}
+		},
+		"dmDeliveryAddress_4022648": {
+			"ref": "43624bf",
+			"submit": true,
+			"id": "4022648",
+			"tag": "dmDeliveryAddress",
+			"type": "dinamicx$3110$dmdeliveryaddress201904",
+			"fields": {
+				"phoneTitle": "电话",
+				"addressTitle": "收货地址",
+				"consigneeTitle": "收件人"
+			},
+			"events": {
+				"addressClick": [{
+					"tag": "openPopupWindow",
+					"type": "openPopupWindow",
+					"fields": {
+						"css": {
+							"height": "0.6"
+						},
+						"options": {
+							"needCloseButton": true
+						},
+						"nextRenderRoot": "dmDeliveryAddressSelectPopupWindowBlock_4022648_window_root",
+						"params": {}
+					}
+				}]
+			},
+			"status": "hidden"
+		},
+		"dmContactEmail_4022658": {
+			"ref": "63ba2eb",
+			"submit": true,
+			"id": "4022658",
+			"tag": "dmContactEmail",
+			"type": "dinamicx$3128$dminput",
+			"fields": {
+				"label": "邮箱",
+				"placeholder": "请填写联系人邮箱"
+			},
+			"events": {
+				"onFinish": [{
+					"tag": "input",
+					"type": "input",
+					"fields": {}
+				}]
+			},
+			"validate": {
+				"msg": ["请填写联系人邮箱"],
+				"regex": ["^[\S]+$"],
+				"fields": ["value"]
+			},
+			"status": "hidden"
+		},
+		"item_ce6ca09d837959be467df77e88f0102f": {
+			"ref": "360f46f",
+			"submit": true,
+			"hidden": {
+				"extensionMap": {
+					"valid": true,
+					"itemId": "725090442756",
+					"bizCode": "ali.china.damai",
+					"cartId": "0",
+					"shoppingOrderId": "0",
+					"villagerId": "0",
+					"skuId": "5208120119841"
+				}
+			},
+			"id": "ce6ca09d837959be467df77e88f0102f",
+			"tag": "item",
+			"type": "block$null$emptyBlock",
+			"fields": {}
+		},
+		"dmContactPhone_4022657": {
+			"ref": "1934a29",
+			"submit": true,
+			"id": "4022657",
+			"tag": "dmContactPhone",
+			"type": "dinamicx$3116$dmcontactsphone201904",
+			"fields": {
+				"placeholder": "请填写联系人手机号",
+				"label": "手机号",
+				"list": [{
+					"area": "中国大陆",
+					"code": "+86"
+				}, {
+					"area": "中国香港",
+					"code": "+852"
+				}, {
+					"area": "中国澳门",
+					"code": "+853"
+				}, {
+					"area": "中国台湾",
+					"code": "+886"
+				}],
+				"value": "15277945132",
+				"selectedIndex": 0
+			},
+			"events": {
+				"itemClick": [{
+					"tag": "openPopupWindow",
+					"type": "openPopupWindow",
+					"fields": {
+						"css": {
+							"height": "0.6"
+						},
+						"options": {
+							"needCloseButton": true
+						},
+						"nextRenderRoot": "dmContactPhoneAreaCodeSelectPopupWindowBlock_dmContactPhoneAreaCodeSelectPopupWindowBlock__window_root",
+						"params": {
+							"phoneAreaCodeEntries": "[{"
+							area ":"
+							中国大陆 ","
+							code ":" + 86 "},{"
+							area ":"
+							中国香港 ","
+							code ":" + 852 "},{"
+							area ":"
+							中国澳门 ","
+							code ":" + 853 "},{"
+							area ":"
+							中国台湾 ","
+							code ":" + 886 "}]"
+						}
+					}
+				}],
+				"onFinish": [{
+					"tag": "input",
+					"type": "input",
+					"fields": {
+						"value": "15277945132"
+					}
+				}]
+			},
+			"validate": {
+				"msg": ["请填写联系人手机号"],
+				"regex": ["^[\S]+$"],
+				"fields": ["value"]
+			}
+		}
+	}
+	","
+	linkage ":" {
+		"common": {
+			"compress": true,
+			"submitParams": "^^$$Z5ed0f032af4be3a20076898ad9c3958fd|!ali.china.damai|null|null|null{$_$}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",
+			"validateParams": "^^$$f0b70db216bb10b7babae912e4be0d45{$_$}H4sIAAAAAAAAAIVR22obMRT8Fz0bsdrsype3Xa1D/VBjaBPoUziWju3F2pWQFFo3+CPyDyH5h0A/J5T+Rc/WhJhA6NuZ4WhmzuiObQJ0+N2F/QpoiovOWza7Y95C2rjQfT14HLC2EOOSVtmMaddxsO0a1sBTAINc2xb7xDtn0PLoboNGvjpTuM7ZiPWn159Kml0wbQ/klB1HzMMWP/JJ4NbgOFl61w8e5kA6reYdJjijhwWLP3h99S3nq1fBkzZFNtBBS74Goyb48vD05/nx96978J7YDsIeE/FvKZvqc7U4DypySmqdBjtU8HN3o5aMmNuIoYqx3fb/bynuIKDhPmCkSyC1rud+aJ03kOCaKjX/PuHUFqJRO9R7RaWy2QZsxBHDXoeDT19SaPst5SimUohxnddFU1yUeSVEJvPsss4rKZUaF009ldm8aiaTqbisGzEuL8pSKFk3clLMZa2ErJp5VhVK5WWRzd9jdjz+BTh13C8jAgAA"
+		},
+		"signature": "4a48896f682f9852cb6a863b7989b482"
+	}
+	","
+	hierarchy ":" {
+		"structure": {
+			"dmViewerBlock_DmViewerBlock": ["dmViewerTitle_4022644", "dmViewer_4022644"],
+			"dmContactBlock_DmContactBlock": ["dmContactTitle_4022655", "dmContactName_4022656", "dmContactEmail_4022658", "dmContactPhone_4022657"],
+			"dmItemBlock_DmItemBlock": ["dmItemInfo_4022641", "dmTicketsInfo_4022642"],
+			"dmDeliveryWayBlock_DmDeliveryWayBlock": ["dmDeliverySelectCard_4022646", "dmDeliveryTip_4022647", "dmDeliveryAddress_4022648", "dmDeliveryFee_4022649", "dmDeliveryMachineAddress_4022651", "dmDeliveryTicketAddress_4022652"],
+			"confirmOrder_1": ["dmTopNotificationBlock_DmTopNotificationBlock", "dmItemBlock_DmItemBlock", "dmViewerBlock_DmViewerBlock", "dmDeliveryWayBlock_DmDeliveryWayBlock", "dmContactBlock_DmContactBlock", "order_9cf2db1f4768dd3811645deb6434f261", "dmInvoiceBlock_DmInvoiceBlock", "dmPromotionBlock_DmPromotionBlock", "dmPayTypeBlock_DmPayTypeBlock", "dmOrderSubmitBlock_DmOrderSubmitBlock", "dmEttributesHiddenBlock_DmAttributesBlock"],
+			"dmOrderSubmitBlock_DmOrderSubmitBlock": ["dmNewProtocol_4022671", "dmSubmit_4022672"],
+			"order_9cf2db1f4768dd3811645deb6434f261": ["item_ce6ca09d837959be467df77e88f0102f"],
+			"dmPayDetailPopupWindowBlock_4022672_window_root": ["dmPayDetailPopup_4022668"],
+			"dmPayTypeBlock_DmPayTypeBlock": ["dmPayTypeTitle_4022665", "dmPayType_4022665"],
+			"dmTopNotificationBlock_DmTopNotificationBlock": ["dmTopNotification_4022639"]
+		}
+	}
+	"}",
+	"feature": "{"
+	subChannel ":"
+	damai @damaih5_h5 ","
+	returnUrl ":"
+	https: //m.damai.cn/damai/pay-success/index.html?spm=a2o71.orderconfirm.bottom.dconfirm&sqm=dianying.h5.unknown.value","serviceVersion":"2.0.0","dataTags":"sqm:dianying.h5.unknown.value"}"}
