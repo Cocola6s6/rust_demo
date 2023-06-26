@@ -48,13 +48,14 @@ fn Video<G: Html>(ctx: Scope) -> View<G> {
             .unchecked_into::<HtmlVideoElement>();
         let video_stream = VideoStream::new(el);
         video_stream.set_video_src(&serde_json::json! ({
-            "audio": false,
+            "audio": true,
             "video": {
                 "facingMode": "environment",
                 "width": "640",
                 "heidht":"480",
             }
-        }));
+        })).await;
+        info!("[video_future done]===============>");
     };
 
     // 需要使用 sycamore 提供的异步执行，因为得先创建才能获取修改
