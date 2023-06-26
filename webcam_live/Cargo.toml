@@ -9,12 +9,14 @@ edition = "2021"
 console_error_panic_hook = "0.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1"
-sycamore = { version = "0.8.0-beta.2", features = ["serde", "futures"] }
+# sycamore = { version = "0.9.0-beta.1", features = ["serde", "futures", "suspense"] }
+sycamore = { version = "0.9.0-beta.1", features = ["serde", "suspense"] } # futures 在 suspense 里
 tracing = "0.1"
 tracing-wasm = "0.2"
 js-sys = "0.3"
 wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
 wasm-bindgen-futures = "0.4.29"
+
 
 [dependencies.web-sys]
 version = "0.3.63"

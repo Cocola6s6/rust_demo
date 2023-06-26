@@ -1,7 +1,9 @@
 use sycamore::prelude::*;
+use sycamore::futures::*;
 use tracing::info;
 use web_sys::*;
 use webcam_live::VideoStream;
+
 fn main() {
     println!("Hello, world!");
 
@@ -55,8 +57,9 @@ fn Video<G: Html>(ctx: Scope) -> View<G> {
         }));
     };
 
-    // 需要异步执行，因为得先创建才能获取修改
-    wasm_bindgen_futures::spawn_local(video_future);
+    // 需要使用 sycamore 提供的异步执行，因为得先创建才能获取修改
+    // wasm_bindgen_futures::spawn_local(video_future);
+    spawn_local_scoped(ctx, video_future);
 
     // 创建页面 view
     info!("[create view]===============>");
