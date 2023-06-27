@@ -1,8 +1,11 @@
 # 配置
 
-1. 下载 [tailwindcss](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.3.2) ，配置环境变量
-2. 下载 [trunk](https://github.com/thedodd/trunk/releases) ，配置环境变量
-3. trunk serve
+1. 下载 [tauri](https://tauri.app/v1/guides/getting-started/setup/) 
+2. 更新 rust，rustup update
+3. 下载 tauri-cli，cargo install tauri-cli
+4. 修改 tauri.config.json，devPath 改为 "http://localhost:8080",
+5. 启动 sycamore，trunk serve
+6. 启动 tauri，cargo tauri dev
 
 
 
