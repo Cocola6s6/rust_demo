@@ -33,3 +33,6 @@ features = [
     "MediaDevices",
     "MediaDeviceKind"
 ]
+
+[workspace]
+members = [".", "src-tauri"]

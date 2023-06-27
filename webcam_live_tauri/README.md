@@ -1,6 +1,6 @@
 # 配置
 
-1. 下载 [tauri](https://tauri.app/v1/guides/getting-started/setup/) 
+1. 整合 [tauri](https://tauri.app/v1/guides/getting-started/setup/integrate/) 
 2. 更新 rust，rustup update
 3. 下载 tauri-cli，cargo install tauri-cli
 4. 修改 tauri.config.json，devPath 改为 "http://localhost:8080",
