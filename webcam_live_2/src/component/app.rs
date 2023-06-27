@@ -1,16 +1,18 @@
 use sycamore::prelude::*;
-use tracing::info;
+use tracing::{info};
 use crate::component::video::Video;
 use crate::AppState;
 
 // App 组件
 #[component]
 pub async fn App<G: Html>(ctx: Scope<'_>) -> View<G> {
-    // 将 AppState 设置到上下文 context，可以在其它地方使用
+    info!("[App start]===================>");
+    // 将 AppState 设置到上下文中，可以在其它地方使用
     let state = AppState::new().await;
-    info!("state: {:?}", state);
+    info!("AppState init done]===================>");
+    info!("{:?}===================>", state);
     provide_context(ctx, state);
-
+    info!("ctx context init done]===================>");
 
     view! {ctx,
         // test1

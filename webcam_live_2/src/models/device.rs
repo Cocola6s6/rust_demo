@@ -1,11 +1,12 @@
 use std::ops::Deref;
 
 use serde::{Deserialize, Serialize};
+use tracing::info;
 use wasm_bindgen::{JsCast, JsValue};
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{MediaDeviceInfo, MediaDeviceKind, MediaDevices};
+use web_sys::{MediaDeviceInfo, MediaDeviceKind, MediaDevices, console};
 
-// TOOD解释：元组结构体
+// TOOD 解释：元组结构体
 #[derive(Debug, Default, PartialEq, Clone, Eq)]
 pub struct Devices(Vec<Device>);
 
@@ -18,10 +19,13 @@ pub struct Device {
 
 impl Devices {
     pub async fn load() -> Self {
+        // 1、通过[API]获取媒体资源
+        info!("[Load devices]===================>");
         let devices = Self::get_media_deivce();
         let all_devices = devices.enumerate_devices().unwrap();
-        web_sys::console::log_1(&all_devices);
+        console::log_2(&JsValue::from("[all_devices]===================>"), &all_devices);
 
+        // 2、将解析为数据结构
         Self::from(&JsFuture::from(all_devices).await.unwrap())
     }
 
@@ -30,7 +34,7 @@ impl Devices {
         let navigator = window.navigator();
         let devices = navigator.media_devices().expect("no navigator.device");
 
-        web_sys::console::log_1(&devices);
+        // console::log_2(&JsValue::from("[devices]===================>"), &devices);
         devices
     }
 
