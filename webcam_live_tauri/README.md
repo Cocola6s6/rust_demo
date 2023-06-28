@@ -1,4 +1,4 @@
-# 配置
+# 创建 tauri 项目流程
 
 1. 整合 [tauri](https://tauri.app/v1/guides/getting-started/setup/integrate/) 
 2. 更新 rust，rustup update
