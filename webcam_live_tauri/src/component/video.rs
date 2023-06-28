@@ -2,6 +2,7 @@ use serde_json::*;
 use sycamore::futures::*;
 use sycamore::prelude::*;
 use tracing::info;
+use wasm_bindgen::JsValue;
 use web_sys::*;
 
 use crate::component::controls::Controls;
@@ -14,6 +15,7 @@ use crate::AppState;
 pub fn Video<G: Html>(ctx: Scope) -> View<G> {
     let state = use_context::<AppState>(ctx);
     let show_controls = create_signal(ctx, true); // 鼠标监听变量
+    let audio_str = true;
 
     // TODO create_memo 的作用是什么？
     // create_memo 内的 Signal 发生变化时，会重新执行 create_memo 的逻辑。这里的 Signal 指的是上下文中定义为 Signal 类型的属性或者父组件传递的属性。
@@ -26,19 +28,14 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
         );
         match state.device_id.get().as_str() {
             "" => json!({
-            "audio": true,
-            "video": {
                 "facingMode": "environment",
                 "width": {"exact": state.get_width()}, // 使用变量时，用 exact
                 "height":{"exact": state.get_height()},
-            }}),
+            }),
             device_id => json!({
-            "audio": true,
-            "video": {
                 "deviceId": {"exact": device_id},
                 "width": {"exact": state.get_width()},
-                "height":{"exact": state.get_height()},
-            }}),
+                "height":{"exact": state.get_height()},}),
         }
     });
 
@@ -54,12 +51,7 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
                 .get::<DomNode>()
                 .unchecked_into::<HtmlVideoElement>();
             let video_stream = VideoStream::new(el);
-            video_stream.set_video_src(&video_src_signal.get()).await;
-
-            // TODO 删除
-            // 加载所有的 devices。后续需要需要将加载的 devices 放到 ctx 上下文中保管
-            // let devices = Devices::load().await;
-            // info!("[devices]===================>{:?}", devices);
+            video_stream.set_video_src(&video_src_signal.get(), audio_str).await;
 
             info!("[video_future]===============>Done");
         });

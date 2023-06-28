@@ -37,19 +37,6 @@ impl Devices {
         let navigator = window.navigator();
         let devices = navigator.media_devices().expect("no navigator.device");
 
-        // 发送媒体资源访问请求。提前请求访问媒体资源
-        let mut constraints = MediaStreamConstraints::new();
-        constraints.video(&true.into()); // 如果为某种媒体类型设置了 true ，得到的结果的流中就需要有此种类型的轨道
-        constraints.audio(&true.into());
-
-        let media = JsFuture::from(
-            devices
-                .get_user_media_with_constraints(&constraints)
-                .expect("发起媒体资源请求错误-1"),
-        )
-        .await
-        .expect("发起媒体资源请求错误-2");
-
         devices
     }
 
