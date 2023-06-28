@@ -1,8 +1,20 @@
 # 配置
 
-1. 下载 [tailwindcss](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.3.2) ，配置环境变量
-2. 下载 [trunk](https://github.com/thedodd/trunk/releases) ，配置环境变量
-3. trunk serve
+1. 下载 [tailwindcss](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.3.2) ，配置环境变量。
+
+2. 配置 tailwindcss.conf.js。
+
+   ```bash
+   tailwindcss init
+   ```
+
+3. 下载 [trunk](https://github.com/thedodd/trunk/releases) ，配置环境变量。
+
+4. 配置 trunk hook，使得构建 wasm 的时候构建 tailwindcss。
+
+5. trunk serve。
+
+
 
 
 
@@ -50,3 +62,28 @@ web 怎么获取设备的媒体资源，mozilla 提供了官方的 API 接口文
 
 
 ![image-20230626161633285](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230626161633285.png)
+
+
+
+### 三、Tailwindcss 和 Bootstrap 比较
+
+* Tailwindcss 和 Bootstrap 一样，是一个 CSS 框架。
+* 可以通过将 rust 文件配置到【module.exports】，然后为 rust  文件中的这些样式生成所有相应的 CSS。
+
+
+
+### 四、Trunk 的作用是什么？
+
+* Trunk 是一个用来简化 wasm web 应用构建的工具。
+
+* 构建后的文件存放在 dist 目录下。
+
+
+
+# TODO
+
+#### 1、使用 trunk hook 构建 tailwindcss 并存放到 trunk 的默认目录 dist 下。但是 trunk 结束之后，dist 目录下的文件就会重置。
+
+* 手动构建 tailwindcss 并且存放到当前目录，标记它作为 asset 让 trunk 一起打包。
+
+![image-20230628200637248](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230628200637248.png)

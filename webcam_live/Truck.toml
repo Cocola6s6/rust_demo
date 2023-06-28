@@ -1,11 +1,10 @@
+
+# TODO hooks 生成的文件最后会被替换，怎么让其 trunk 之后保留下来？
+# 构建到当前目录下，作为 trunk 的 assert，让 trunk 自动去获取。
 [[hooks]]
-stage = "buid"
+stage = "build"
 command = "tailwindcss"
 command_arguments = [
-    "build",
-    "-i",
-    "index.css",
-    "-o",
-    "./dist/tailwind.css",
+    "build -i index.css -o ./tailwind.css",
 ]
 
