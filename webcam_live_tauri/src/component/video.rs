@@ -26,6 +26,7 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
             "[devicve switch]===================>device_id:{:?}",
             state.device_id.get()
         );
+        // TODO 这里从上下文中获取宽高时会异常
         match state.device_id.get().as_str() {
             "" => json!({
                 "facingMode": "environment",
@@ -91,8 +92,8 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
                 video(
                     ref=video_ref,
                     autoplay=true,
-                    // width={state.get_width()},
-                    // height={state.get_height()},
+                    width={state.get_width()},
+                    height={state.get_height()},
                     // src="https://samplelibs.com/lib/preview/mp4/sample-5s.mp4",
                 )
             }

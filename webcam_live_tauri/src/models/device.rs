@@ -22,7 +22,7 @@ impl Devices {
         // 1、通过[API]获取媒体资源
         info!("[Load devices]===================>");
         let devices = Self::get_media_deivce().await;
-        let all_devices = devices.enumerate_devices().unwrap();
+        let all_devices = devices.enumerate_devices().unwrap(); // 对应 webapi 的 【getDisplayMedia()】，作用是提示用户去选择和授权。
         console::log_2(
             &JsValue::from("[all_devices]===================>"),
             &all_devices,
