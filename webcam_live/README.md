@@ -84,6 +84,8 @@ web 怎么获取设备的媒体资源，mozilla 提供了官方的 API 接口文
 
 #### 1、使用 trunk hook 构建 tailwindcss 并存放到 trunk 的默认目录 dist 下。但是 trunk 结束之后，dist 目录下的文件就会重置。
 
-* 手动构建 tailwindcss 并且存放到当前目录，标记它作为 asset 让 trunk 一起打包。
+* 使用 trunk hook 的 pre_build，生成 tailwindcss 并且存放到当前目录，标记它作为 asset 让 trunk 一起打包。
+
+![image-20230629154921580](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230629154921580.png)
 
 ![image-20230628200637248](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230628200637248.png)

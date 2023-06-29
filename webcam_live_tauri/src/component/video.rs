@@ -29,13 +29,14 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
         match state.device_id.get().as_str() {
             "" => json!({
                 "facingMode": "environment",
-                "width": {"exact": state.get_width()}, // 使用变量时，用 exact
-                "height":{"exact": state.get_height()},
+                // "width": {"exact": state.get_width()}, // 使用变量时，用 exact
+                // "height":{"exact": state.get_height()},
             }),
             device_id => json!({
                 "deviceId": {"exact": device_id},
-                "width": {"exact": state.get_width()},
-                "height":{"exact": state.get_height()},}),
+                // "width": {"exact": state.get_width()},
+                // "height":{"exact": state.get_height()},
+            }),
         }
     });
 
@@ -51,7 +52,9 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
                 .get::<DomNode>()
                 .unchecked_into::<HtmlVideoElement>();
             let video_stream = VideoStream::new(el);
-            video_stream.set_video_src(&video_src_signal.get(), audio_str).await;
+            video_stream
+                .set_video_src(&video_src_signal.get(), audio_str)
+                .await;
 
             info!("[video_future]===============>Done");
         });
@@ -59,6 +62,9 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
 
     // 3、创建视频组件
     info!("[create view]===============>");
+    let div_class = || format!("relative");
+    let video_class = || format!("");
+    let button_class = || format!("absolute bottom-10 left-40");
     view! {ctx,
         // test1
         // div {
@@ -77,20 +83,25 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
 
         // test2 增加鼠标监听功能
         div(
+            class=div_class(),
             on:mouseover = move |_| show_controls.set(true),
             on:mouseout = move |_| show_controls.set(false),
         ) {
-            video(
-                ref=video_ref,
-                class="border border-gray-400 rounded-lg",
-                autoplay=true,
-                width=state.get_width(),
-                height=state.get_height(),
-                // src="https://samplelibs.com/lib/preview/mp4/sample-5s.mp4",
-            )
+            div(class=video_class()) {
+                video(
+                    ref=video_ref,
+                    autoplay=true,
+                    // width={state.get_width()},
+                    // height={state.get_height()},
+                    // src="https://samplelibs.com/lib/preview/mp4/sample-5s.mp4",
+                )
+            }
 
             // 创建按钮组件
-            Controls(show_controls=show_controls)
+            div(class=button_class()) {
+                Controls(show_controls=show_controls)
+            }
+
         }
     }
 }
