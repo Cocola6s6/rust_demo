@@ -1,3 +1,18 @@
+# Sycamore Web 应用开发
+
+前面说到，使用原生 wasm 太累了，可以选择一些现有的 wasm 框架开发，如 Web 应用开发可以使用 Sycamore，桌面应用开发可以使用 Tauri。
+
+流程和 wasm 一样，都通过【web-sys】调用 webapi 进行页面操作：获取页面元素、修改页面元素、增加页面元素、增加页面监听等操作。
+
+
+
+【问题】为什么要使用 Sycamore 呢，不直接使用 wasm呢？
+
+* 这就好比你提问，为什么要使用 vue 呢，不直接使用 js。
+* Sycamore 提供了动态渲染、接口更高级抽象等等功能。不需要你重复造轮子..................
+
+
+
 # 配置
 
 1. 下载 [tailwindcss](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.3.2) ，配置环境变量。

@@ -6,12 +6,28 @@ use sycamore::prelude::*;
 use tracing::info;
 use wasm_bindgen::{prelude::Closure, JsCast, JsValue, UnwrapThrowExt};
 use web_sys::{console, Event, Window};
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen(module = "/tauri.js")]
+extern "C" {
+
+   #[wasm_bindgen(js_name = "js_api")]
+   fn js_api();
+
+   #[wasm_bindgen(js_name = "tauri_api")]
+   async fn tauri_api();
+}
 
 // App 组件
 #[component]
 pub async fn App<G: Html>(ctx: Scope<'_>) -> View<G> {
     // 1、初始化
     init(ctx).await;
+    
+    info!("[sycamore->js][sycamore]===================>");
+    js_api();
+    info!("[sycamore->js->tauri][sycamore]===================>");
+    tauri_api().await;
 
     window_event_listener_2(
         ctx,
@@ -39,11 +55,6 @@ pub async fn App<G: Html>(ctx: Scope<'_>) -> View<G> {
 
     // 2、创建 App 组件
     view! {ctx,
-        // test1
-        p {
-            "Hello, World!"
-        }
-
         // test3
         div(class="") {
             Video()
@@ -56,7 +67,7 @@ async fn init(ctx: Scope<'_>) {
     // 将 AppState 设置到上下文中，可以在其它地方使用
     let state = AppState::new().await;
     info!("AppState init done]===================>");
-    info!("{:?}===================>", state);
+    info!("{:?}", state);
 
     provide_context(ctx, state);
     info!("ctx context init done]===================>");

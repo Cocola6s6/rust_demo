@@ -1,3 +1,9 @@
+# Tauri 桌面应用开发
+
+前面说到，使用原生 wasm 太累了，可以选择一些现有的 wasm 框架开发，如 Web 应用开发可以使用 Sycamore，桌面应用开发可以使用 Tauri。
+
+
+
 # 创建 tauri 项目流程
 
 1. 整合 [tauri](https://tauri.app/v1/guides/getting-started/setup/integrate/) 

@@ -11,9 +11,18 @@
 </head>
 
 <body>
-    <div style="display: block;">
+    <div style="display: none;">
         test
     </div>
+
+    <!-- TODO：测试 js->tauri
+    <!-- 结果：不通过 -->
+    <script>
+        const { invoke } = window.__TAURI__.tauri
+
+        invoke('tauri_api');
+        console.log("[js->tauri][js]===============================>");
+      </script>
 </body>
 
 </html>

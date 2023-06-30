@@ -35,6 +35,10 @@
 
 
 
+![image-20230630152537053](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230630152537053.png)
+
+
+
 ### 三、文件结构分层
 
 * common：通用文件，如 constants、error 等
@@ -64,3 +68,7 @@
 * Web 应用开发，用 rust 开发的 Web 应用不比用 JS 性能高么？如用 Sycamore 开发 Web 应用。
 
 ![image-20230628135244605](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230628135244605.png)
+
+
+
+最后，使用原生 wasm 太累了，可以选择一些现有的 wasm 框架开发，如 Web 应用开发可以使用 Sycamore，桌面应用开发可以使用 Tauri。
