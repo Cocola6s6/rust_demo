@@ -36,7 +36,7 @@ pub async fn App<G: Html>(ctx: Scope<'_>) -> View<G> {
     // 2、创建 App 组件
     view! {ctx,
         // test3
-        div(class="") {
+        div {
             Video()
         }
     }

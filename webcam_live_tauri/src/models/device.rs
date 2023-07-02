@@ -22,7 +22,14 @@ impl Devices {
         // 1、通过[API]获取媒体资源
         info!("[Load devices]===================>");
         let devices = Self::get_media_deivce().await;
-        let all_devices = devices.enumerate_devices().unwrap(); // 对应 webapi 的 【getDisplayMedia()】，作用是提示用户去选择和授权。
+
+        // TODO 使用授权提示错误了
+        // let _ = devices.get_display_media().unwrap();   // 对应 webapi 的 【getDisplayMedia】，作用是提示用户去选择和授权。
+
+        // 直接使用 【getUserMedia】进行授权，因为获取数据流之前是有授权提示的
+        let _ = devices.get_user_media_with_constraints(&MediaStreamConstraints::new().video(&true.into()));
+        let all_devices = devices.enumerate_devices().unwrap(); // 对应 webapi 的【enumerateDevices】，得到可用的媒体输入和输出设备的列表。需要注意不授权的话 mac 获取不到。
+
         console::log_2(
             &JsValue::from("[all_devices]===================>"),
             &all_devices,

@@ -25,13 +25,13 @@ pub fn Controls<'a, G: Html>(ctx: Scope<'a>, props: Props<'a>) -> View<G> {
 
     // 2、获取控件是否显示变量
     let is_show = create_memo(ctx, || match *props.show_controls.get() {
-        true => "block",
-        false => "none",
+        true => "visible",
+        false => "hidden",
     });
     info!("[is_hidden]===============>{:?}", is_show);
 
     // class css 样式
-    let div_style = || format!("display: {};", is_show.get());
+    let div_style = || format!("visibility: {};", is_show.get());
     let select_div_class = || format!("justify-center");
     let select_class = || {
         format!("w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6")

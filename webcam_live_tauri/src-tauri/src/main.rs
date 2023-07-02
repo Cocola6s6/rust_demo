@@ -17,6 +17,6 @@ async fn tauri_api(window: tauri::Window) {
 
 #[tauri::command]
 fn tauri_set_window_decorations_api(window: Window, decorations: bool) {
-    println!("[tauri_set_window_decoration_api]==============================>{:?}", decorationss);
+    println!("[tauri_set_window_decoration_api]==============================>{:?}", decorations);
     window.set_decorations(decorations);
 }

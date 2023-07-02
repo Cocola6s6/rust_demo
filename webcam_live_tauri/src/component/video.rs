@@ -64,8 +64,9 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
     // 3、创建视频组件
     info!("[create view]===============>");
     let div_class = || format!("relative");
-    let video_class = || format!("");
-    let button_class = || format!("absolute bottom-10 left-40");
+    let video_class = || format!("relative");
+    let button_class = || format!("absolute bottom-10 left-1/2 transform -translate-x-1/2");
+    let button_style = || format!("display: flex");
     view! {ctx,
         // test1
         // div {
@@ -99,7 +100,10 @@ pub fn Video<G: Html>(ctx: Scope) -> View<G> {
             }
 
             // 创建按钮组件
-            div(class=button_class()) {
+            div(
+                class=button_class(),
+                style=button_style()
+            ) {
                 Controls(show_controls=show_controls)
             }
 

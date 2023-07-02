@@ -22,6 +22,24 @@
 
 
 
+【准备】
+
+* webapi 的【enumerateDevices】
+
+  初始化加载媒体资源使用的 webapi 的【enumerateDevices】，得到可用的媒体输入和输出设备的列表。但是需要注意不授权的话 mac 获取不到。
+
+* webapi 是【【getDisplayMedia】
+
+  授权的 webapi 是【【getDisplayMedia】，提示用户去选择和授权。
+
+* webapi 是【【getUserMedia】
+
+  授权并且得到数据流
+
+
+
+
+
 #### 2、Video 组件设计
 
 1. 根据上下文中的设备编号修改资源信息。
@@ -57,6 +75,10 @@
 
 
 # 一些问题
+
+
+
+
 
 # TODO
 
@@ -97,4 +119,10 @@
         spawn_local_scoped(ctx, video_future);
     });
 ```
+
+
+
+#### 3、初始化的时候使用【getDisplayMedia】进行授权的时候，提示错误了
+
+> Unhandled Promise Rejection: InvalidAccessError: getDisplayMedia must be called from a user gesture handler.
 
