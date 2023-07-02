@@ -11,7 +11,11 @@
 3. 下载 tauri-cli，cargo install tauri-cli
 4. 修改 tauri.config.json，devPath 改为 "http://localhost:8080",
 5. 启动 sycamore，trunk serve
-6. 启动 tauri，cargo tauri dev
+6. 启动 tauri，cargo tauri dev 或者 cargo tauri dev --no-watch
+
+
+
+cargo tauri dev 是动态加载，cargo tauri dev --no-watch 取消动态加载
 
 
 
