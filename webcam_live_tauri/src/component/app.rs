@@ -2,20 +2,24 @@ use std::mem::transmute;
 
 use crate::component::video::Video;
 use crate::AppState;
+use sycamore::futures::*;
 use sycamore::prelude::*;
 use tracing::info;
+use wasm_bindgen::prelude::*;
 use wasm_bindgen::{prelude::Closure, JsCast, JsValue, UnwrapThrowExt};
 use web_sys::{console, Event, Window};
-use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(module = "/tauri.js")]
 extern "C" {
 
-   #[wasm_bindgen(js_name = "js_api")]
-   fn js_api();
+    #[wasm_bindgen(js_name = "js_api")]
+    fn js_api();
 
-   #[wasm_bindgen(js_name = "tauri_api")]
-   async fn tauri_api();
+    #[wasm_bindgen(js_name = "tauri_api")]
+    async fn tauri_api();
+
+    #[wasm_bindgen(js_name = "tauri_set_window_decorations_api")]
+    async fn tauri_set_window_decorations_api(decorations: bool);
 }
 
 // App 组件
@@ -23,35 +27,11 @@ extern "C" {
 pub async fn App<G: Html>(ctx: Scope<'_>) -> View<G> {
     // 1、初始化
     init(ctx).await;
-    
-    info!("[sycamore->js][sycamore]===================>");
-    js_api();
-    info!("[sycamore->js->tauri][sycamore]===================>");
-    tauri_api().await;
 
-    window_event_listener_2(
-        ctx,
-        "resize",
-        Box::new(move || {
-            // TODO 这里注意，要使用 move 将 ctx 所有权移交给监听事件函数，否则 ctx 结束时会发生悬垂引用。
-            // TODO 按理来说 ctx 的声明周期是比较长的，我不关闭应用程序是不会消失，但是这里确实报了 ctx 空，需要后续再看看，ctx 什么时候被消耗，ctx 在哪里被销毁了。
-            info!("[window_event_listener]===================>");
-            let window = web_sys::window().unwrap();
-            let width = window.inner_width().unwrap().as_f64().unwrap() as u32;
-            let height = window.inner_height().unwrap().as_f64().unwrap() as u32;
-            info!("[new window size]===================>{:?}x{:?}", width, height);
-            // 设置高度宽度到上下文中
-            let state = use_context::<AppState>(ctx);
-
-            info!(
-                "[old window size]===================>{:?}x{:?}",
-                state.get_width(),
-                state.get_height()
-            );
-            state.dimesions.set((width, height));
-            
-        }),
-    );
+    // info!("[sycamore->js][sycamore]===================>");
+    // js_api();
+    // info!("[sycamore->js->tauri][sycamore]===================>");
+    // tauri_api().await;
 
     // 2、创建 App 组件
     view! {ctx,
@@ -71,6 +51,57 @@ async fn init(ctx: Scope<'_>) {
 
     provide_context(ctx, state);
     info!("ctx context init done]===================>");
+
+    // 初始化鼠标移动监听事件
+    window_event_listener_2(
+        ctx,
+        "mouseover",
+        Box::new(move || {
+            info!("[window_event_listener]===================>");
+            spawn_local_scoped(ctx, async move {
+                tauri_set_window_decorations_api(true).await;
+            })
+        }),
+    );
+
+    // 初始化鼠标移动监听事件
+    window_event_listener_2(
+        ctx,
+        "mouseout",
+        Box::new(move || {
+            info!("[window_event_listener]===================>");
+            spawn_local_scoped(ctx, async move {
+                tauri_set_window_decorations_api(false).await;
+            })
+        }),
+    );
+
+    // 初始化窗口大小变化监听事件
+    window_event_listener_2(
+        ctx,
+        "resize",
+        Box::new(move || {
+            // TODO 这里注意，要使用 move 将 ctx 所有权移交给监听事件函数，否则 ctx 结束时会发生悬垂引用。
+            // TODO 按理来说 ctx 的声明周期是比较长的，我不关闭应用程序是不会消失，但是这里确实报了 ctx 空，需要后续再看看，ctx 什么时候被消耗，ctx 在哪里被销毁了。
+            info!("[window_event_listener]===================>");
+            let window = web_sys::window().unwrap();
+            let width = window.inner_width().unwrap().as_f64().unwrap() as u32;
+            let height = window.inner_height().unwrap().as_f64().unwrap() as u32;
+            info!(
+                "[new window size]===================>{:?}x{:?}",
+                width, height
+            );
+            // 设置高度宽度到上下文中
+            let state = use_context::<AppState>(ctx);
+
+            info!(
+                "[old window size]===================>{:?}x{:?}",
+                state.get_width(),
+                state.get_height()
+            );
+            state.dimesions.set((width, height));
+        }),
+    );
 }
 
 /*

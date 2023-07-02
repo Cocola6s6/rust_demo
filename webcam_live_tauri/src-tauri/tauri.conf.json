@@ -7,12 +7,15 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "Webcam",
+    "productName": "tauri-app",
     "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "window": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
