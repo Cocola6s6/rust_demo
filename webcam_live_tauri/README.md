@@ -77,6 +77,10 @@ cargo tauri dev 是动态加载，cargo tauri dev --no-watch 取消动态加载
 
 
 
+API 调用图如下所示。
+
+![image-20230705173554212](https://note-1305755407.cos.ap-nanjing.myqcloud.com/note/image-20230705173554212.png)
+
 
 
 # 一些问题
