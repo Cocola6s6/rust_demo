@@ -9,9 +9,10 @@
 1. 整合 [tauri](https://tauri.app/v1/guides/getting-started/setup/integrate/) 
 2. 更新 rust，rustup update
 3. 下载 tauri-cli，cargo install tauri-cli
-4. 修改 tauri.config.json，devPath 改为 "http://localhost:8080",
-5. 启动 sycamore，trunk serve
-6. 启动 tauri，cargo tauri dev 或者 cargo tauri dev --no-watch
+4. 创建 tauri 项目，cargo tauri init
+5. 修改 tauri.config.json，devPath 改为 "http://localhost:8080",
+6. 启动 sycamore，trunk serve
+7. 启动 tauri，cargo tauri dev 或者 cargo tauri dev --no-watch
 
 
 
