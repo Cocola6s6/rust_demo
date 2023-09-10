@@ -63,12 +63,23 @@ fn encode(&mut self, line: T, buf: &mut BytesMut) -> Result<(), LinesCodecError>
 
 
 
-
-
 b'\n' 表示换行符字符，它的 ASCII 值是 10。
 ~~~rust
 .position(|b| *b == b'\n')
 ~~~
+
+【注意】不同的操作系统中，通过输入设备进行换行操作时，操作系统 OS 收到的换行符是不一样的：
+
+\* linux, \n
+
+\* windows, \r\n
+
+\* mac, \r
+
+但是，在编程语言层面，rust、c 等都是统一使用的是 linux 的 \n 作为换行符。
+
+如果，程序在 windows 下执行，文本写入是会自动将 \n 转换为 \r\n，文本读取时 \r\n 也会被转换为 \n，所以为什么相同的代码生成的文件 windows 下会相对较大的原因了。
+
 
 
 
