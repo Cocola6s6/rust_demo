@@ -423,11 +423,13 @@ impl std::error::Error for LinesCodecError {}
 * 通常来说，数据的接收是一个【循环】的过程，比如 Netty 是事件循环机制，tokio 是使用 loop 函数。持续地接收数据包。
 
 
+
 # 实现一个自定义的 Codec
+
 自定义 HexCodec，实现一个简单的协议，协议格式如下：
 ~~~bash
 报文最少长度14字节：  设备地址（6）+ 信息ID（2）+ 功能编码（1）+ 长度（2）+ 最小数据（1）+ CRC（2）
-例子：AA AA AA AA AA + BB BB + CC + DD DD + EE + FF FF
+例子：AA AA AA AA AA AA + BB BB + CC + DD DD + EE + FF FF
 
 ~~~
 
@@ -435,16 +437,30 @@ impl std::error::Error for LinesCodecError {}
 ### 一、需要的 crate
 *  crc，进行 crc 校验
 
+
+
 ### 二、要实现的功能
-将字符串编码成16进制
-将16进制解码成字符串
 
 ~~~rust
-// 解码方法
-fn decode(&mut self, buf: &mut BytesMut) -> Result<Option<String>, HexCodec> {}
+// 报文消息数据结构
 
-// 编码方法
-fn encode(&mut self, line: T, buf: &mut BytesMut) -> Result<(), HexCodecError> {}
+pub struct Msg {
+    dev_id: String,
+    fun_id: String,
+    code: String,
+    len: String,
+    msg_data: String,
+    crc: String,
+}
+
+
+dev_id（6 byte）+ fun_id（2 byte）+ code（1 byte）+ len（2 byte）+ msg（1 byte）+ crc（2 byte）
+
+// 解码方法，将 16 进制解码成 T
+fn decode(&mut self, buf: &mut BytesMut) -> Result<Option<Msg>, HexCodecError> {}
+
+// 编码方法，将 T 编码成 16 进制
+fn encode(&mut self, msg: Msg, buf: &mut BytesMut) -> Result<(), HexCodecError> {}
 
 ~~~
 
