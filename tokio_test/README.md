@@ -443,16 +443,19 @@ impl std::error::Error for LinesCodecError {}
 
 ~~~rust
 // 报文消息数据结构
-
 pub struct Msg {
     dev_id: String,
     fun_id: String,
     code: String,
-    len: String,
-    msg_data: String,
+    len: u16,
+    msg_data: MsgData,
     crc: String,
 }
 
+pub struct MsgData {
+    mode: u8,
+    op_code: u8,
+}
 
 dev_id（6 byte）+ fun_id（2 byte）+ code（1 byte）+ len（2 byte）+ msg（1 byte）+ crc（2 byte）
 
