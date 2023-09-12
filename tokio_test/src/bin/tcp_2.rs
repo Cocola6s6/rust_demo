@@ -1,4 +1,5 @@
-use bytes::{Buf, BytesMut, BufMut};
+use bytes::{Buf, BufMut, BytesMut};
+use crc::{Crc, CRC_16_IBM_SDLC};
 use futures_util::{stream::SplitSink, stream::SplitStream, SinkExt, StreamExt};
 use std::{fmt, io, str, usize};
 use tokio::{
@@ -70,6 +71,7 @@ impl Decoder for HexCodec {
                 return Ok(None);
             }
 
+            // 取出缓冲区数据
             let dev_id_hex = buf.split_to(6);
             let fun_id_hex = buf.split_to(2);
             let code_hex = buf.split_to(1);
@@ -83,7 +85,8 @@ impl Decoder for HexCodec {
             );
 
             // 使用 format! 宏将字节转换为十六进制字符串
-            // 02表示转换后的字符串最少是2位，不足补0
+            // 如："[0x01 0x02]"=>"0102"
+            // 02表示转换后的16进制字符串最少是2位，不足补0，即一个字节
             // X表示转换为大写的16进制
             let dev_id = dev_id_hex
                 .iter()
@@ -116,9 +119,29 @@ impl Decoder for HexCodec {
                 .collect::<Vec<String>>()
                 .join("");
 
+            // 进行crc校验
+            let msg_less_crc = format!(
+                "{}{}{}{}{}{}",
+                dev_id,
+                fun_id,
+                code,
+                len,
+                msg_data.get(0..2).unwrap(),
+                msg_data.get(2..4).unwrap()
+            );
+
+            let crc_check = Crc::<u16>::new(&CRC_16_IBM_SDLC);
+            let crc_check = crc_check.checksum(msg_less_crc.as_bytes());
+            let crc_check = format!("{:04X}", crc_check);
+            println!(
+                "msg_less_crc={:?}, crc={:?}, crc_check={:?}",
+                msg_less_crc, crc, crc_check
+            );
+            assert_eq!(crc, crc_check);
+
             // msg_data的前面一个字节是mode，后面一个字节是op_code
-            let mode = msg_data.get(0..1).unwrap();
-            let op_code = msg_data.get(1..2).unwrap();
+            let mode = msg_data.get(0..2).unwrap();
+            let op_code = msg_data.get(2..4).unwrap();
             let msg_data = MsgData {
                 mode: u8::from_str_radix(mode, 16).unwrap(),
                 op_code: u8::from_str_radix(op_code, 16).unwrap(),
@@ -133,7 +156,7 @@ impl Decoder for HexCodec {
                 dev_id,
                 fun_id,
                 code,
-                len : u16::from_str_radix(&len, 16).unwrap(),
+                len: u16::from_str_radix(&len, 16).unwrap(),
                 msg_data: msg_data,
                 crc,
             };
@@ -173,9 +196,6 @@ impl Encoder<Msg> for HexCodec {
     // 将msg中16进制的数据编码为字节。两种类型的数据：1)数字 2)字符串
     // 如：数字中："10"=>[0x0A], 字符串中："AA"=>[0xAA]
     fn encode(&mut self, msg: Msg, buf: &mut BytesMut) -> Result<(), HexCodecError> {
-        buf.reserve(14);
-
-
         // 数字类型
         let mode = format!("{:02X}", msg.msg_data.mode);
         let op_code = format!("{:02X}", msg.msg_data.op_code);
@@ -189,12 +209,13 @@ impl Encoder<Msg> for HexCodec {
         let crc = msg.crc;
 
         // 获得所有的16进制字符串
-        let msg = dev_id + &fun_id + &code + &len + &data + &crc;
+        let msg = format!("{}{}{}{}{}{}", dev_id, fun_id, code, len, data, crc);
         println!("msg={:?}", msg);
 
         // 使用hex_string_to_bytes，将16进制字符串传字节。
         // 而不是使用as_bytes，因为as_bytes是按照普通字符串转。
-        buf.put(hex_string_to_bytes(&msg).unwrap().as_slice());
+        buf.reserve(16);
+        buf.put(hex_string_to_bytes(&msg).unwrap().as_slice()); // as_slice 可以将具有切片语义的数据结构转换为切片，如：Vec<u8>=>[u8]
 
         println!("buf={:?}", buf);
 
@@ -335,10 +356,10 @@ async fn write_to_client(mut writer: HexFramedSink, mut msg_rx: mpsc::Receiver<M
 
 #[cfg(test)]
 mod tests {
-    use bytes::BytesMut;
-    use tokio_util::codec::{Decoder, Encoder};
-
     use crate::{HexCodec, Msg, MsgData};
+    use bytes::BytesMut;
+    use crc::{Crc, CRC_16_IBM_SDLC};
+    use tokio_util::codec::{Decoder, Encoder};
 
     #[test]
     pub fn test() {
@@ -352,13 +373,27 @@ mod tests {
             mode: 1,
             op_code: 1,
         };
+
+        let dev_id = "AAAAAAAAAAAA".to_string();
+        let fun_id = "BBBB".to_string();
+        let code = "CC".to_string();
+        let len = format!("{:04x}", 4);
+        let mode = format!("{:02x}", msg_data.mode);
+        let op_code = format!("{:02x}", msg_data.op_code);
+        let msg_less_crc = format!("{}{}{}{}{}{}", dev_id, fun_id, code, len, mode, op_code);
+
+        let crc = Crc::<u16>::new(&CRC_16_IBM_SDLC);
+        let crc = crc.checksum(msg_less_crc.as_bytes());
+        let crc = format!("{:04X}", crc);
+        println!("msg_less_crc={}, crc={:?}", msg_less_crc, crc);
+
         let msg = Msg {
             dev_id: "AAAAAAAAAAAA".to_string(),
             fun_id: "BBBB".to_string(),
             code: "CC".to_string(),
-            len: 2,
+            len: 4,
             msg_data: msg_data,
-            crc: "FFFF".to_string(),
+            crc: crc,
         };
 
         let mut encoded_buffer = BytesMut::new();

@@ -424,7 +424,7 @@ impl std::error::Error for LinesCodecError {}
 
 
 
-# 实现一个自定义的 Codec
+# 实现一个自定义的 HexCodec
 
 自定义 HexCodec，实现一个简单的协议，协议格式如下：
 ~~~bash
@@ -466,4 +466,156 @@ fn decode(&mut self, buf: &mut BytesMut) -> Result<Option<Msg>, HexCodecError> {
 fn encode(&mut self, msg: Msg, buf: &mut BytesMut) -> Result<(), HexCodecError> {}
 
 ~~~
+
+
+
+#### 1、encode 方法详细设计
+
+1. 入参是 msg。
+2. 将 msg 中 16 进制的数据编码为字节。msg 中有两种数据类型：1)数字 2)字符串。
+3. 编码数字类型。
+4. 编码字符串类型。
+5. 获得所有的 16 进制字符串。
+6. 使用 hex_string_to_bytes()，将 16 进制字符串传字节。
+7. 创建大小为 16 的buf，将字节放入 buf。
+
+
+
+【编码数字类型】
+
+使用 format! 宏，可以将数字类型转换为对应格式的字符串。
+
+* 02，表示转换后的 16 进制字符串最少是 2 位，不足补 0，即一个字节。
+* X，表示转换为大写的16进制。
+
+~~~rust
+let mode = format!("{:02X}", msg.msg_data.mode);
+let op_code = format!("{:02X}", msg.msg_data.op_code);
+let data = mode + &op_code;
+let len = format!("{:04X}", data.len());
+~~~
+
+
+
+【编码字符串类型】
+
+字符串类型不用特殊处理，这里的字符串就是 16 进制的字符串。
+
+
+
+【获得所有的 16 进制字符串】
+
+字符串组织的方式：
+
+* 可以使用 + ，但是注意第一个字符串的所有权会发生转义。
+* 可以使用 format! 宏。
+
+~~~rust
+let msg = format!("{}{}{}{}{}{}", dev_id, fun_id, code, len, data, crc);
+~~~
+
+
+
+【使用 hex_string_to_bytes()，将 16 进制字符串传字节】
+
+声明特定处理函数，按照 16 进制字符串进行转换。而不是使用 as_bytes，因为 as_byte s是按照普通字符串转。
+
+~~~rust
+/*
+ * 将十六进制字符串转换为为字节数组
+*/
+fn hex_string_to_bytes(hex_string: &str) -> Option<Vec<u8>> {
+    // 去除字符串前缀 "0x"（如果存在）
+    let hex_string = hex_string.trim_start_matches("0x");
+
+    // 检查十六进制字符串的长度是否为偶数
+    if hex_string.len() % 2 != 0 {
+        return None; // 长度不合法，无法解析
+    }
+
+    // 将每两个字符解析为一个字节
+    let mut bytes = Vec::new();
+    let mut i = 0;
+    while i < hex_string.len() {
+        let byte = match u8::from_str_radix(&hex_string[i..i + 2], 16) {
+            Ok(b) => b,
+            Err(_) => return None, // 解析失败，无法解析
+        };
+        bytes.push(byte);
+        i += 2;
+    }
+
+    Some(bytes)
+}
+~~~
+
+
+
+#### 2、decode 方法详细设计
+
+1. 入参 buf。
+2. loop 循环，因为数据的读取需要一直持续。下面逻辑都是在循环内进行。
+3. 去除 buf 缓冲区数据中的换行符。
+4. 判断数据是否完整，至少 14 个字节。不完整则继续等待。
+5. 取出缓冲区数据。
+6. 转换缓冲区数据，将字节转换为 16 进制字符串。
+7. 对数据进行 CRC 校验。
+8. 解析得到完整的 msg 数据。
+
+
+
+【去除 buf 缓冲区数据中的换行符】
+
+使用 buf.advance 移除换行符数据。
+
+~~~rust
+while buf.len() > 0 && (buf[0] == b'\n' || buf[0] == b'\r') {
+    buf.advance(1);
+}
+~~~
+
+
+
+【等待更多数据】
+
+* return Ok(None)，表示继续等待。
+* 异步编程中，返回 Ok(None) 通常用于表示“需要等待更多数据”这一情况，以便异步任务可以暂时挂起并等待更多数据的到来。
+
+
+
+【取出缓冲区数据】
+
+使用 buf.split_to(index) 方法，取出数据。
+
+* 注意是取出，而不是读取。取出是指针往前移动了，原 buf 中的该数据已经不存在了。
+
+~~~rust
+let dev_id_hex = buf.split_to(6);
+let fun_id_hex = buf.split_to(2);
+~~~
+
+
+
+【转换缓冲区数据，将字节转换为 16 进制字符串】
+
+此时，缓存区的数据时字节为单位，需要转换为 16 进制字符串。
+
+* 【字节/数字=>字符串】同样的使用 format! 宏来进行转换。
+* 字节数据需要使用迭代来处理每一个。
+
+~~~rust
+let dev_id = dev_id_hex
+                .iter()
+                .map(|byte| format!("{:02X}", byte))
+                .collect::<Vec<String>>()
+                .join("");
+~~~
+
+
+
+【对数据进行 CRC 校验】
+
+引入【crc crate】，对数据进行校验。
+
+
 
